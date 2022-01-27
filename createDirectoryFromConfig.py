@@ -354,12 +354,12 @@ def createFolders(directoryTree, path, bIgnoreBaseRoot):
             return
 def printHelp():
     print("Arguments help:\n1. Directory where folders will be created (default is script's directory).\n\
-        2. Config file name to parse from (default is script's name + \'Config.txt\'). \n\
-        3. Config file directory (default is script's directory)\nCommands:\n-help -syntax")
+2. Config file name to parse from (default is script's name + \'Config.txt\'). \n\
+3. Config file directory (default is script's directory)\nCommands:\n-help -syntax")
 def printSyntax():
     print("Syntax.\nEach line represents a folder. Paste tab before folder name to note that this folder is child of previous that has less tabs\
-        (if prev. line has same count of tabs, current line is not a child)\n\
-        Parent\n\tChild\n\tChild\n\tChild\nNewParent\n\tChild1\n\tChild2\n\t\tChildOfChi\n\tChild3")
+(if prev. line has same count of tabs, current line is not a child)\n\
+Parent\n\tChild2\n\tChild3\n\tChild4\nNewParent\n\tChild1\n\tChild2\n\t\tChildOfChild\n\tChild3")
 #returns list of args
 def handleCmdArgs() -> list:
     mandArgc = 3
