@@ -330,13 +330,13 @@ class HierarchyParser():
             charIndex += 1
         return baseDirectory
 
-def createFolders(directoryTree, path, bIgnoreParent):
+def createFolders(directoryTree, path, bIgnoreBaseRoot):
     dir = Directory("")
     iter: DirectoryIterator = ColumnDirectoryIterator(directoryTree)
     iterCount = 0
     #dirSize = directoryTree.size()
     while(dir is not None): # TODO compare with directory size
-        if iterCount == 0 and bIgnoreParent: # ignore parent
+        if iterCount == 0 and bIgnoreBaseRoot: # ignore parent
             print(f"Ignoring base root")
             dir = iter.getNext()
             if len (directoryTree.children) == 0:
