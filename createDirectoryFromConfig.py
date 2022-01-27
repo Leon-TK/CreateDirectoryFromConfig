@@ -341,7 +341,12 @@ def createFolders(directoryTree, path):
 def printHelp():
     print("Arguments help:\n1. Directory where folders will be created (default is script's directory).\n\
         2. Config file name to parse from (default is script's name + \'Config.txt\'). \n\
-        3. Config file directory (default is script's directory)\n")
+        3. Config file directory (default is script's directory)\nCommands:\n-help -syntax")
+def printSyntax():
+    print("Syntax.\nEach line represents a folder. Paste tab before folder name to note that this folder is child of previous that has less tabs\
+        (if prev. line has same count of tabs, current line is not a child)\n\
+        Parent\n\tChild\n\tChild\n\tChild\nNewParent\n\tChild1\n\tChild2\n\t\tChildOfChi\n\tChild3")
+#returns list of args
 def handleCmdArgs() -> list:
     mandArgc = 3
     argc = len(sys.argv) - 1
@@ -356,12 +361,17 @@ def handleCmdArgs() -> list:
     if sys.argv[1] == "-help":
         printHelp()
         sys.exit(0)
-    
+
+    if sys.argv[1] == "-syntax":
+        printSyntax()
+        sys.exit(0)
+
+    #handle missed args
     missedArgc = mandArgc - argc
     
     result.append(sys.argv[1])
 
-    if missedArgc == 2: result.append(__name__ + "Config.txt")
+    if missedArgc == 2: result.append(Path(__file__).stem + "Config.txt")
     else: result.append(sys.argv[2])
 
     if missedArgc == 1: result.append(f"{os.path.dirname(__file__)}")
@@ -371,6 +381,7 @@ def handleCmdArgs() -> list:
     return result
 #########################
 
+#args: look printHelp()
 args = handleCmdArgs()
 parser = HierarchyParser(args[1], args[2])
 tree = parser.parseHierarchy()
