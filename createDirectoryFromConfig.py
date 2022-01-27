@@ -330,14 +330,28 @@ class HierarchyParser():
             charIndex += 1
         return baseDirectory
 
-def createFolders(directoryTree, path):
+def createFolders(directoryTree, path, bIgnoreParent):
     dir = Directory("")
     iter: DirectoryIterator = ColumnDirectoryIterator(directoryTree)
-    while(dir is not None):
+    iterCount = 0
+    #dirSize = directoryTree.size()
+    while(dir is not None): # TODO compare with directory size
+        if iterCount == 0 and bIgnoreParent: # ignore parent
+            print(f"Ignoring base root")
+            dir = iter.getNext()
+            if len (directoryTree.children) == 0:
+                print(f"Root {dir.name} has no children")
+                return
+            iterCount += 1
+            continue
         dir = iter.getNext()
-        dirPath = dir.getPath()
-        fullPath = path + "\\" + dirPath
-        Path(fullPath).mkdir(parents=True,exist_ok=True)
+        if dir is not None:
+            fullPath = path + "\\" + dir.getPath()
+            Path(fullPath).mkdir(parents=True,exist_ok=True)
+            iterCount += 1
+        else:
+            print("Dir is None")
+            return
 def printHelp():
     print("Arguments help:\n1. Directory where folders will be created (default is script's directory).\n\
         2. Config file name to parse from (default is script's name + \'Config.txt\'). \n\
@@ -360,10 +374,12 @@ def handleCmdArgs() -> list:
 
     if sys.argv[1] == "-help":
         printHelp()
+        input("Press any key to exit")
         sys.exit(0)
 
     if sys.argv[1] == "-syntax":
         printSyntax()
+        input("Press any key to exit")
         sys.exit(0)
 
     #handle missed args
@@ -385,4 +401,4 @@ def handleCmdArgs() -> list:
 args = handleCmdArgs()
 parser = HierarchyParser(args[1], args[2])
 tree = parser.parseHierarchy()
-createFolders(tree, args[0])
+createFolders(tree, args[0], True)
