@@ -4,6 +4,8 @@ import os
 from abc import ABC, abstractmethod
 from typing import List
 from pathlib import Path
+from _fileSystemChecks import fileSystemChecks as fsChecks
+
 class DirectoryIterator(ABC):
     @abstractmethod
     def getNext(self) -> 'Directory':
@@ -360,17 +362,49 @@ def printSyntax():
     print("Syntax.\nEach line represents a folder. Paste tab before folder name to note that this folder is child of previous that has less tabs\
 (if prev. line has same count of tabs, current line is not a child)\n\
 Parent\n\tChild2\n\tChild3\n\tChild4\nNewParent\n\tChild1\n\tChild2\n\t\tChildOfChild\n\tChild3")
+
+def GetDefaultConfigName() -> str:
+    return f"{Path(__file__).stem}Config.txt"
+def GetDefaultConfigPath() -> str:
+    return f"{os.path.dirname(__file__)}"
+def GetDefaultDirectoryPath() -> str:
+    return f"{os.path.dirname(__file__)}"
+def CreateConfigFile(path, name):
+    #TODO Ignore if exist
+    file = open(f"{path}\\{name}", 'a')
+    file.close()
+def CheckDirectoryPath(path) -> bool:
+    if not fsChecks.DirectoryPathCheck(path, False): return False
+    return True
+def CheckConfigName(name) -> bool:
+    if not fsChecks.FileNameCheck(name, False, False): return False
+    return True
+def CheckConfigPath(path) -> bool:
+    if not fsChecks.DirectoryPathCheck(path, False): return False
+    return True
+def CheckConfig(fullPath) -> bool:
+    try:
+        config = open(fullPath, "r")
+    except FileNotFoundError:
+            print(f"{fullPath} config is empty, check -syntax arg command for help")
+            sys.exit(0)
+
+    if len(config.read()) == 0:
+        print(f"{fullPath} config is empty, check -syntax arg command for help")
+        return False
+    return True
 #returns list of args
 def handleCmdArgs() -> list:
     mandArgc = 3
     argc = len(sys.argv) - 1
+    missedArgc = mandArgc - argc
     result = []
 
-    if argc == 0: # set defaults
-        result.append(f"{os.path.dirname(__file__)}")
-        result.append(Path(__file__).stem + "Config.txt")
-        result.append(f"{os.path.dirname(__file__)}")
-        return result
+    if missedArgc == mandArgc:
+        printHelp()
+        CreateConfigFile(GetDefaultConfigPath(), GetDefaultConfigName())
+        input("Press any key to exit")
+        sys.exit(0)
 
     if sys.argv[1] == "-help":
         printHelp()
@@ -381,22 +415,34 @@ def handleCmdArgs() -> list:
         printSyntax()
         input("Press any key to exit")
         sys.exit(0)
-
-    #handle missed args
-    missedArgc = mandArgc - argc
     
-    result.append(sys.argv[1])
+    if CheckDirectoryPath(sys.argv[1]): result.append(sys.argv[1])
+    else: sys.exit(0)
 
-    if missedArgc == 2: result.append(Path(__file__).stem + "Config.txt")
-    else: result.append(sys.argv[2])
+    if missedArgc == 2:
+        CreateConfigFile(GetDefaultConfigPath(), GetDefaultConfigName())
+        if CheckConfig(GetDefaultConfigPath() + "\\" + GetDefaultConfigName()):
+            result.append(GetDefaultConfigName())
+            result.append(GetDefaultConfigPath())
+            return result
+        else: sys.exit(0)
 
-    if missedArgc == 1: result.append(f"{os.path.dirname(__file__)}")
-    else: result.append(sys.argv[3])
+    if CheckConfigName(sys.argv[2]): result.append(sys.argv[2])
+    else: sys.exit(0)
+
+    if missedArgc == 1:
+        result.append(GetDefaultConfigPath())
+        if CheckConfig(GetDefaultConfigPath() + sys.argv[2]):
+            return result
+        else: sys.exit(0)
     
+    if CheckConfigPath(sys.argv[3]): result.append(sys.argv[3])
+    else: sys.exit(0)
 
-    return result
+    if CheckConfig(sys.argv[3] + sys.argv[2]):
+            return result
+    else: sys.exit(0)
 #########################
-
 #args: look printHelp()
 args = handleCmdArgs()
 parser = HierarchyParser(args[1], args[2])
