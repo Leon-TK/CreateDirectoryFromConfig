@@ -14,12 +14,15 @@ import _src.configManager as configManager
 if __name__ == "__main__":
     cmdLineManager = CmdLineManager(sys.argv)
     cfgManager = configManager.ConfigManager(cmdLineManager.GetConfigName(), cmdLineManager.GetConfigPath())
+
     if not cfgManager.doesConfigExist():
         print(f"Config does not exist") 
         sys.exit(0)
+
     if not cfgManager.hasConfigContent(): 
         print(f"Config has no content")
         sys.exit(0)
+        
     parser = HierarchyParser(cfgManager.FetchBuffer())
     tree = parser.parseHierarchy()
 

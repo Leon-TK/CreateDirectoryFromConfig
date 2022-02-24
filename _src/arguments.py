@@ -51,6 +51,7 @@ class Help(AArgument, IArgument):
         return False
     def CanOmmitPosition() -> bool:
         return True
+        
 class Syntax(AArgument, IArgument):
     def __init__(self) -> None:
         AArgument.__init__(self)
@@ -72,6 +73,7 @@ Parent\n\tChild2\n\tChild3\n\tChild4\nNewParent\n\tChild1\n\tChild2\n\t\tChildOf
         return False
     def CanOmmitPosition() -> bool:
         return True
+
 class ConfigName(AArgument, IArgument):
     def __init__(self) -> None:
         AArgument.__init__(self)
@@ -91,6 +93,7 @@ class ConfigName(AArgument, IArgument):
         return True
     def CanOmmitPosition() -> bool:
         return True
+
 class ConfigPath(AArgument,IArgument):
     def __init__(self) -> None:
         AArgument.__init__(self)
@@ -110,6 +113,7 @@ class ConfigPath(AArgument,IArgument):
         return True
     def CanOmmitPosition() -> bool:
         return True
+        
 class DirPath(AArgument,IArgument):
     def __init__(self) -> None:
         AArgument.__init__(self)

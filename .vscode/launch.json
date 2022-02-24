@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "args": ["-dirPath=E:\\Garbage", "-cfgPath=E:\\Garbage", "-cfgName=yolo.txt"],
+            "args": ["-dirPath=E:\\Garbage", "-cfgPath=for tests", "-cfgName=yolo.txt"],
             "console": "integratedTerminal"
         }
     ]
