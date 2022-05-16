@@ -1,6 +1,6 @@
 import sys
 
-from _fileSystemChecks import fileSystemChecks as fsChecks
+import fileSystemChecks as fsChecks
 
 from .directory import IDirectory, Directory_Impl
 

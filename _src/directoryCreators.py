@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from abc import ABC, abstractmethod
 
-from _fileSystemChecks import fileSystemChecks as fsChecks
+import fileSystemChecks as fsChecks
 
 from .directory import IDirectory, Directory_Impl
 from .directoryIterator import DirectoryIterator
