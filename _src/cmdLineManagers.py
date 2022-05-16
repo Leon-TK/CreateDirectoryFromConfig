@@ -22,7 +22,7 @@ class CmdLineManager:
         self.configPath = None
         self.dirPath = None
         self.parsedArgs = []
-        self.Prosess()
+        self.Process()
 
     def GetConfigName(self) -> str:
         return self.configName
@@ -40,13 +40,13 @@ class CmdLineManager:
         argc = len(parsedArgs)
         return mandArgCount - argc
 
-    def ProsessAllMissedArgs(self):
+    def ProcessAllMissedArgs(self):
         ArgumentManager.PrintHelp(Help())
         #self.CreateConfigFile(self.GetDefaultConfigPath(), self.GetDefaultConfigName())
         input("Press any key to exit")
         sys.exit(0)
         
-    def ProsessParsedArgs(self, args):
+    def ProcessParsedArgs(self, args):
         for arg in args:
             if type(arg) is Help:
                 ArgumentManager.PrintHelp(arg)
@@ -63,38 +63,38 @@ class CmdLineManager:
             if type(arg) is DirPath:
                 self.dirPath = arg.GetValue()
 
-    def ProsessDirPath(self):
+    def ProcessDirPath(self):
         if self.dirPath is not None:
             if not self.CheckDirectoryPath(self.dirPath): sys.exit(0)
         else:
             self.dirPath = self.GetDefaultDirectoryPath()
             ArgumentManager.PrintHelp(Help())
             sys.exit(0)
-    def ProsessConfigName(self):
+    def ProcessConfigName(self):
         if self.configName is not None:
             if not self.CheckConfigName(self.configName): sys.exit(0)
         else:
             self.configName = self.GetDefaultConfigName()
-    def ProsessConfigPath(self):
+    def ProcessConfigPath(self):
         if self.configPath is not None:
             if not self.CheckConfigPath(self.configPath): sys.exit(0)
         else:
             self.configPath = self.GetDefaultConfigPath()
 
-    def Prosess(self) -> list:
+    def Process(self) -> list:
         parsedArgs = self.ParseArgs(self.cmdLine)
         mandatoryArgsCount = 3
         missedArgc = self.CalcMissedArgsCount(mandatoryArgsCount, parsedArgs)
 
-        if missedArgc == mandatoryArgsCount: self.ProsessAllMissedArgs()
+        if missedArgc == mandatoryArgsCount: self.ProcessAllMissedArgs()
 
-        self.ProsessParsedArgs(self.parsedArgs)
+        self.ProcessParsedArgs(self.parsedArgs)
 
-        self.ProsessDirPath()
+        self.ProcessDirPath()
 
-        self.ProsessConfigName()
+        self.ProcessConfigName()
 
-        self.ProsessConfigPath()
+        self.ProcessConfigPath()
 
     def GetDefaultConfigName(self) -> str:
         return f"{Path(__file__).stem}Config.txt"
