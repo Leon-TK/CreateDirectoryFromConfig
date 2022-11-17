@@ -1,2 +1,2 @@
-def Append(path, fileName):
+def Append(path, fileName): #TODO: use Path lib
     return path + "\\" + fileName

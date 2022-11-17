@@ -15,13 +15,14 @@ class ADirectory():
         self.children = []
         if children is not None:
             self.children = children
-        self.size = 0
-        self.FetchChildrenSize()
+        self.size = self.FetchChildrenSize()
 
     def FetchChildrenSize(self):
+        size = 0
         if self.children:
             for child in self.children:
-                self.size += child.GetSize()
+                size += child.GetSize()
+        return size
 
 class Directory_Impl(ADirectory, IDirectory):
     def __init__(self, name: str, parent: "Directory_Impl" = None, children: 'Directory_Impl' = None) -> None:
